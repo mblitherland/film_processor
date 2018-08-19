@@ -13,16 +13,20 @@ def process_matches(matches, config):
     start_time = time()
     for match, size in matches.items():
         current += 1
+        print()
+        print('*'*50)
         print(f'Processing {current} of {count + 1}: {match}')
         _process(match, config)
         processed += size
         delta = time() - start_time
-        print(f'    Time elapsed: {delta:,.2f} seconds, est. remaining {delta * total / processed:,.2f} seconds')
+        print(f'Time elapsed: {delta:,.2f} seconds, est. remaining {delta * total / processed:,.2f} seconds')
+        print('*'*50)
+        pritn()
 
 
 def _process(from_name, config):
     to_name = sub(f'{config.vsrc}$', f'{config.target}.mov', from_name)
-    print(f'from {from_name} to {to_name}')
+    print(f'    from {from_name} to {to_name}')
     proc_list = [config.ffmpeg, '-i', from_name, '-c:v']
     if config.target == 'prores':
         proc_list.extend(['prores', '-c:a', 'copy', to_name])

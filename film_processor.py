@@ -14,7 +14,7 @@ def main():
     # Print the to-process summary and ask for confirmation
     count, total = get_status(matches)
     print(f'Processing {count} movie files that have a combined size of {total:,}')
-    prompt = input('Would you like to continue? (y/N)')
+    prompt = input('Would you like to continue? (y/N) ')
     if prompt.lower().strip() == 'y':
         # Process the files
         process_matches(matches, config)
