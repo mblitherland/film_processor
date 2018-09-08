@@ -1,9 +1,12 @@
-# ffmpeg -i ../C0014.MP4 -c:v prores -c:a copy C0014_prores.mov
-# ffmpeg -i ../C0010.MP4 -c:v dnxhd -profile:v dnxhr_hq -c:a copy C0010_dnxhr_hq.mov
 from .files import get_status
+from math import floor
 from re import sub
 from subprocess import run
 from time import time
+
+# The basic functionality I want to capture with the converter
+# ffmpeg -i ../C0014.MP4 -c:v prores -c:a copy C0014_prores.mov
+# ffmpeg -i ../C0010.MP4 -c:v dnxhd -profile:v dnxhr_hq -c:a copy C0010_dnxhr_hq.mov
 
 
 def process_matches(matches, config):
@@ -15,11 +18,14 @@ def process_matches(matches, config):
         current += 1
         print()
         print('*'*50)
-        print(f'Processing {current} of {count + 1}: {match}')
+        print(f'Processing {current} of {count}: {match}')
         _process(match, config)
         processed += size
         delta = time() - start_time
-        print(f'Time elapsed: {delta:,.2f} seconds, est. remaining {delta * total / processed:,.2f} seconds')
+        est_total = delta * total / processed
+        print(f'Time elapsed: {_friendly_times(delta)}, est. total time {_friendly_times(est_total)}')
+        est_remaining = est_total - delta
+        print(f'Estimated remaining time: {_friendly_times(est_remaining)}')
         print('*'*50)
         print()
 
@@ -35,3 +41,10 @@ def _process(from_name, config):
     else:
         raise Exception('Invalid encoding target, use prores or dnxhr_hq')
     run(proc_list)
+
+def _friendly_times(seconds):
+    hours = floor(seconds / 3600)
+    rem = seconds - hours * 3600
+    minutes = floor(rem / 60)
+    rem = rem - minutes * 60
+    return f'{hours} hours, {minutes} minutes, {rem:.2f} seconds'
