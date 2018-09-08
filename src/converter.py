@@ -21,7 +21,7 @@ def process_matches(matches, config):
         delta = time() - start_time
         print(f'Time elapsed: {delta:,.2f} seconds, est. remaining {delta * total / processed:,.2f} seconds')
         print('*'*50)
-        pritn()
+        print()
 
 
 def _process(from_name, config):
